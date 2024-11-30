@@ -2,11 +2,12 @@ package application
 
 import (
 	// "bufio"
-	"log"
+	// "log"
 	// "os"
 	// "strings"
 
-	"github.com/Nagib_227/rpn/pkg/rpn"
+	"fmt"
+	"github.com/Nagib227/rpn/pkg/rpn"
 )
 
 type Application struct {
@@ -20,5 +21,8 @@ func New() *Application {
 // тут будем читать введенную строку и после нажатия ENTER писать результат работы программы на экране
 // если пользователь ввел exit - то останаваливаем приложение
 func (a *Application) Run() {
-	log.Println(rpn.NewWorld(20, 30))
+	err := rpn.run()
+	if err != nil {
+        fmt.Println("Ошибка:", err)
+    }
 }

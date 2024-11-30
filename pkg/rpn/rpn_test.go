@@ -2,8 +2,9 @@
 package rpn_test
 
 import (
+	// "fmt"
 	"testing"
-	"github.com/Nagib_227/rpn/pkg/rpn"
+	"github.com/Nagib227/rpn/pkg/rpn"
 )
 
 func TestNewWorld(t *testing.T) {
@@ -23,7 +24,7 @@ func TestNewWorld(t *testing.T) {
 	for _, tt := range tests {
 		height := tt.height
 		width := tt.width
-		world, err := NewWorld(height, width)
+		world, err := rpn.NewWorld(height, width)
 		if err != nil {
 			if tt.wantErr {
 				continue
