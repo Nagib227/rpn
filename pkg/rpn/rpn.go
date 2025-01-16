@@ -1,68 +1,60 @@
 package rpn
 
 import (
-	"fmt"
-	// "github.com/Nagib227/rpn/config"
-	"os"
-	"strconv"
+    "fmt"
+    "net/http"
+    "sync"
+    // "time"
+    // "strconv"
 )
 
-type World struct {
-	Height int 
-    Width int 
-    Cells [][]bool 
+var (
+    fibs = []int{0, 1} // Начальные числа Фибоначчи
+    mu sync.Mutex    // Мьютекс для безопасного доступа к fibs
+    current int          // Индекс текущего возвращаемого числа
+    requestCount int
+)
+
+// fibonacciHandler обрабатывает запросы и возвращает следующее число Фибоначчи
+func FibonacciHandler(w http.ResponseWriter, r *http.Request) {
+    mu.Lock() // Блокируем доступ к текущему индексу
+    defer mu.Unlock()
+
+    // Проверяем, нужно ли вычислить следующее число
+    if current >= len(fibs) {
+        next := fibs[current-1] + fibs[current-2]
+        fibs = append(fibs, next)
+    }
+
+    // Возвращаем текущее число и увеличиваем индекс
+    fmt.Fprint(w, fibs[current])
+    current++
 }
 
- func NewWorld(height, width int) (*World, error){
- 	if height <= 0 || width <= 0 {
- 		return nil, fmt.Errorf("err")
- 	}
- 	var c [][]bool
- 	for range height {
- 		c = append(c, make([]bool, width))
- 	}
- 	return &World{Height: height, Width: width, Cells: c}, nil
- }
 
-func run() error {
-    // Проверяем количество аргументов
-    if len(os.Args) < 4 {
-        return fmt.Errorf("недостаточно аргументов: требуется 3 (имя файла, ширина, высота, процент)")
-    }
+func Metrics(next http.HandlerFunc) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        mu.Lock() // Блокируем доступ к текущему индексу
+        requestCount++
+        mu.Unlock()
 
-    // Извлекаем ширину, высоту и процент заполнения
-    width, _ := strconv.Atoi(os.Args[1])
-    height, _ := strconv.Atoi(os.Args[2])
-    // percent := os.Args[3]
-
-    // Формируем строку для записи в файл
-    config, err := NewWorld(height, width)
-    if err != nil {
-        return fmt.Errorf("ошибка: %v", err)
-    }
-
-    var c string
-    for i := range config.Cells {
-    	for j := range i {
-    		fmt.Errorf("%v", j)
-    		// c += strconv.FormatBool(j) + " "
-    	}
-    	c += "\n"
-    }
-    
-
-    // Создаем (или открываем) файл для записи
-    file, err := os.Create("config.txt")
-    if err != nil {
-        return fmt.Errorf("ошибка создания файла: %v", err)
-    }
-    defer file.Close() // Отложенное закрытие файла
-
-    // Записываем данные в файл
-    _, err = file.WriteString(c)
-    if err != nil {
-        return fmt.Errorf("ошибка записи в файл: %v", err)
-    }
-
-    return nil
+        next(w, r)
+    })
 }
+
+
+func MetricsHandler(w http.ResponseWriter, r *http.Request) {
+    mu.Lock() // Блокируем доступ к текущему индексу
+    defer mu.Unlock()
+
+    // Возвращаем текущее число
+    fmt.Fprintf(w, "rpc_duration_milliseconds_count %v", requestCount)
+}
+
+func main() {
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", FibonacciHandler)
+    mux.Handle("/metrics", Metrics(MetricsHandler)) // Связываем путь с обработчиком
+    fmt.Println("Сервер работает на http://localhost:8080/")
+    http.ListenAndServe(":8080", mux) // Запуск сервера
+}   

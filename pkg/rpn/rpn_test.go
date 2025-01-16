@@ -1,52 +1,48 @@
-// go
 package rpn_test
 
 import (
-	// "fmt"
+	"net/http"
+	"net/http/httptest"
+	// "strconv"
 	"testing"
+	// "time"
 	"github.com/Nagib227/rpn/pkg/rpn"
 )
 
-func TestNewWorld(t *testing.T) {
-	type test struct {
-		height  int
-		width   int
-		wantErr bool
+func TestFibonacciHandler(t *testing.T) {
+	// Clear the request count before testing
+	// requestCount = 0	
+
+	tt := []struct {
+		name           string
+		expectedStatus int
+		expectedBody   string
+	}{
+		{"First Fibonacci Number", http.StatusOK, "0"},
+		{"Second Fibonacci Number", http.StatusOK, "1"},
+		{"Third Fibonacci Number", http.StatusOK, "1"},
+		{"Fourth Fibonacci Number", http.StatusOK, "2"},
 	}
 
-	tests := []test{
-		{height: 0, width: 4, wantErr: true},
-		{height: -1, width: 4, wantErr: true},
-		{height: 5, width: 0, wantErr: true},
-		{height: 5, width: 6, wantErr: false},
-	}
-
-	for _, tt := range tests {
-		height := tt.height
-		width := tt.width
-		world, err := rpn.NewWorld(height, width)
-		if err != nil {
-			if tt.wantErr {
-				continue
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			req, err := http.NewRequest("GET", "/", nil)
+			if err != nil {
+				t.Fatal(err)
 			}
-			t.Errorf("Unexpected error: %s", err)
-		}
 
-		if world.Height != height {
-			t.Errorf("expected height: %d, actual height: %d", height, world.Height)
-		}
-		if world.Width != width {
-			t.Errorf("expected width: %d, actual width: %d", width, world.Width)
-		}
+			rr := httptest.NewRecorder()
+			handler := http.HandlerFunc(rpn.FibonacciHandler)
 
-		if len(world.Cells) != height {
-			t.Errorf("expected height: %d, actual number of rows: %d", height, len(world.Cells))
-		}
+			handler.ServeHTTP(rr, req)
 
-		for i, row := range world.Cells {
-			if len(row) != width {
-				t.Errorf("expected width: %d, actual row's %d len: %d", width, i, world.Width)
+			if tc.expectedStatus != rr.Code {
+				t.Errorf("failed error code")
 			}
-		}
+			// t.Errorf("'%s', '%s',", rr.Body.String(), tc.expectedBody)
+			if tc.expectedBody != rr.Body.String() {
+				t.Errorf("failed body")
+			}
+		})
 	}
 }

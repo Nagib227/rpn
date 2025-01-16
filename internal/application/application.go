@@ -21,7 +21,7 @@ func New() *Application {
 // тут будем читать введенную строку и после нажатия ENTER писать результат работы программы на экране
 // если пользователь ввел exit - то останаваливаем приложение
 func (a *Application) Run() {
-	err := rpn.run()
+	err := rpn.Run()
 	if err != nil {
         fmt.Println("Ошибка:", err)
     }
