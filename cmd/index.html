@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+<title>DevHub</title>
 <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
-    <header class="header-outer">
-        <div class="header-inner responsive-wrapper">
-          <div class="header-logo">
-            <img src="assets/img/209471338_invert_1.png"/>
-            <!-- <img src="C:\Users\danii\Downloads\209471351\209471351_1_1.png"/> -->
-          </div>
-          <nav class="header-navigation">
-            <a href="#">Home</a>
-            <a href="#">About Us</a>
-            <a href="#">Post++</a>
-            <button>Menu</button>
-          </nav>
-        </div>
-      </header>
+<header id="header-3" class="header">
+  <div class="menu-logo">
+    <a href="#"><img src="assets/img/209471338_invert_1.png" alt="DevHub" /></a>
+  </div>
+  <div id="hide_search"></div>
+  <nav class="header-nav">
+    <div class="search-button">
+      <a href="#" class="search-toggle" data-selector="#header-3"></a>
+    </div>
+    <ul class="menu">
+      <li><a href="#">Home</a></li>
+      <li><a href="/assets/html/creation.html">Post++</a></li>
+      <li><a href="#">About Us</a></li>
+    </ul>
+    <form action="" class="search-box">
+      <input type="text" class="text search-input" placeholder="Type here to search..." />
+    </form>
+  </nav>
+</header>
       <!-- Content -->
       <main class="main">
         <div class="main-content responsive-wrapper">
@@ -44,4 +49,7 @@
 
     </footer>
 </body>
+<script src="assets/jQuery/jquery-3.7.1.js" type="text/javascript"></script>
+<script src="assets/js/index.js" type="text/javascript"></script>
+
 </html>
