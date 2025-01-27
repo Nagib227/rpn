@@ -17,15 +17,17 @@ input:focus {
 
 input.question,
 textarea.question {
-  font-size: 48px;
+  font-size: 28px;
+  resize: none;
   font-weight: 300;
   border-radius: 2px;
   margin: 0;
   border: none;
-  width: 80%;
+  width: 90%;
   background: rgba(0, 0, 0, 0);
   transition: padding-top 0.2s ease, margin-top 0.2s ease;
   overflow-x: hidden; /* Hack to make "rows" attribute apply in Firefox. */
+  overflow-y: scroll;
 }
 /* Underline and Placeholder */
 
@@ -45,7 +47,7 @@ textarea.question + label {
 
 input.question:focus + label,
 textarea.question:focus + label {
-  width: 80%;
+  width: 90%;
 }
 
 input.question:focus,
@@ -81,6 +83,7 @@ input.question:invalid,
 textarea.question:invalid {
   box-shadow: none;
   resize: none;
+  overflow-y: hidden;
 }
 
 input.question + label > span,
@@ -89,7 +92,7 @@ textarea.question + label > span {
   margin: 0;
   position: absolute;
   color: #8F8F8F;
-  font-size: 48px;
+  font-size: 32px;
   top: -66px;
   left: 0px;
 /*  z-index: -1;*/
@@ -135,4 +138,106 @@ input.question:invalid ~ input[type="submit"], textarea.question:invalid ~ input
   100% {
     opacity: 1;
   }
+}
+
+textarea.question::-webkit-scrollbar {
+  width: 10px;
+}
+ 
+textarea.question::-webkit-scrollbar-track {
+  background-color:#edeadf;
+  border-radius: 10px;
+}
+ 
+textarea.question::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color:#000;
+}
+
+
+.slider {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 15px 30px 0 rgba(0,0,0, 0.1);
+  background-color: #fff;
+  padding: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
+  font-size: 1.125rem;
+}
+.slider > * + * {
+  margin-top: 1.25em;
+}
+.slider img {
+  poiner-events: none;
+}
+.slider h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.slider code {
+  display: inline-block;
+  padding: 0.125em 0.25em;
+  border-radius: 2px;
+}
+
+.slider strong {
+  font-weight: 700;
+}
+.slider-list {
+  width: 100%;
+  height: 40vh;
+  overflow: hidden;
+}
+
+.slider-list.grab {
+  cursor: grab;
+}
+
+.slider-list.grabbing{
+  cursor: grabbing;
+}
+
+.slider-track {
+  display: flex;
+}
+
+.slide {
+  width: 100%;
+  height: 40vh;
+  flex-shrink: 0;
+  font-size: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+}
+
+.slider-arrows {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.next,
+.prev {
+  background: none;
+  border: none;
+  margin: 0 10px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.next.disabled,
+.prev.disabled {
+  opacity: .25;
+  pointer-events: none;
+}
+.inputQuestion {
+  position: relative;
+  left: 20px;
+  top: -10px;
 }
