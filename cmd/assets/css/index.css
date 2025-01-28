@@ -5,6 +5,12 @@
 *:before {
   box-sizing: border-box;
 }
+
+
+.hide {
+  display: none;
+}
+
 .header {
     width: 99%;
     height: 70px;
@@ -248,3 +254,16 @@ body {
 .widget strong {
   font-weight: 700;
 }
+.highlight {
+    background-color: yellow; /* Выделение найденных слов */
+}
+
+
+
+
+
+
+
+
+
+

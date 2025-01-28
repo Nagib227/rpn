@@ -1,29 +1,29 @@
 package rpn
 
 import (
-    "net/http"
-    "os"
-    "html/template"
+	"html/template"
+	"net/http"
+	"os"
 )
 
-var tpl = template.Must(template.ParseFiles("index.html"))
+var tpl = template.Must(template.ParseFiles("C:\\Users\\leoni\\Documents\\Practice\\GO\\my-go-project\\WebApp\\rpn\\cmd\\index.html"))
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-    tpl.Execute(w, nil)
+	tpl.Execute(w, nil)
 }
 
 func Main() {
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "3000"
-    }
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
 
-    mux := http.NewServeMux()
+	mux := http.NewServeMux()
 
-    // Добавьте следующие две строки
-    fs := http.FileServer(http.Dir("assets"))
-    mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
+	// Добавьте следующие две строки
+	fs := http.FileServer(http.Dir("assets"))
+	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-    mux.HandleFunc("/", indexHandler)
-    http.ListenAndServe(":"+port, mux)
+	mux.HandleFunc("/", indexHandler)
+	http.ListenAndServe(":"+port, mux)
 }
