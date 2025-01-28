@@ -11,6 +11,9 @@ var tpl = template.Must(template.ParseFiles("C:\\Users\\leoni\\Documents\\Practi
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	tpl.Execute(w, nil)
 }
+func indexHandlerCreation(w http.ResponseWriter, r *http.Request) {
+	template.Must(template.ParseFiles("assets\\html\\creation.html")).Execute(w, nil)
+}
 
 func Main() {
 	port := os.Getenv("PORT")
@@ -25,5 +28,6 @@ func Main() {
 	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
 	mux.HandleFunc("/", indexHandler)
+	mux.HandleFunc("/creation", indexHandlerCreation)
 	http.ListenAndServe(":"+port, mux)
 }
